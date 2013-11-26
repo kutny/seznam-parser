@@ -9,12 +9,14 @@ class SearchRequest implements IRequest {
 	private $type;
 	private $q;
 	private $from;
+	private $count;
 	private $pId;
 
-	public function __construct($type, $q, $from, $pId = null) {
+	public function __construct($type, $q, $from, $count = 10, $pId = null) {
 		$this->type = $type;
 		$this->q = $q;
 		$this->from = $from;
+		$this->count = $count;
 		$this->pId = $pId;
 	}
 
@@ -26,7 +28,8 @@ class SearchRequest implements IRequest {
 		$params = array(
 			'type' => $this->type,
 			'q' => $this->q,
-			'from' => $this->from
+			'from' => $this->from,
+			'count' => $this->count
 		);
 
 		if ($this->pId) {
