@@ -99,6 +99,9 @@ class ResponseDecoder {
 				if ($result >= $max / 2) { $result -= $max; }
 				return $result;
 
+			case DataType::TYPE_DOUBLE:
+				return $this->getDouble($dataEnvelope);
+
 			case DataType::TYPE_BINARY:
 				$lengthBytes = ($first & 7) + 1;
 				$length = $this->getInt($lengthBytes, $dataEnvelope);
@@ -121,9 +124,7 @@ class ResponseDecoder {
 
 			case DataType::TYPE_DATETIME:
 				throw new \Exception('Not implemented yet: TYPE_DATETIME');
-			case DataType::TYPE_DOUBLE:
-				throw new \Exception('Not implemented yet: TYPE_DOUBLE');
-	
+
 			default:
 				throw new \Exception('Unkown FRPC type ' . $type);
 				break;
@@ -141,6 +142,53 @@ class ResponseDecoder {
 		}
 			
 		return $result;
+	}
+
+	private function getDouble(BinaryDataEnvelope $dataEnvelope) {
+		$bytes = array();
+		$index = 8;
+		while ($index--) {
+			$bytes[$index] = $dataEnvelope->getByte();
+		}
+
+		$sign = ($bytes[0] & 0x80 ? 1 : 0);
+        
+        $exponent = ($bytes[0] & 127) << 4;
+        $exponent += $bytes[1] >> 4;
+        
+        if ($exponent == 0) {
+			return pow(-1, $sign) * 0;
+		}
+        
+        $mantissa = 0;
+        $byteIndex = 1;
+        $bitIndex = 3;
+        $index = 1;
+        
+        do {
+			$bitValue = ($bytes[$byteIndex] & (1 << $bitIndex) ? 1 : 0);
+                $mantissa += $bitValue * pow(2, -$index);
+                
+                $index++;
+                $bitIndex--;
+                if ($bitIndex < 0) {
+					$bitIndex = 7;
+					$byteIndex++;
+				}
+        } while ($byteIndex < count($bytes));
+        
+        if ($exponent == 0x7ff) {
+			if ($mantissa) {
+				return null;
+			}
+			else {
+				return pow(-1, $sign) * log(0);
+			}
+		}
+        
+        $exponent -= (1 << 10) - 1;
+
+        return pow(-1, $sign) * pow(2, $exponent) * (1+$mantissa);
 	}
 	
 	private function parseMember($result, BinaryDataEnvelope $dataEnvelope) {
