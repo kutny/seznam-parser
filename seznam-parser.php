@@ -9,10 +9,13 @@
  */
 require 'bootstrap.php';
 
+$cookieJarPath = __DIR__ . '/tmp/seznam_cookiejar.dat';
+
 $query = 'letenky usa';
 $from = 0;
 
-$serpParser = getSerpParser('http://www.seznam.sk/ajax');
+// $serpParser = getSerpParser('http://www.seznam.sk/ajax', $cookieJarPath, false);
+$serpParser = getSerpParser('http://search.seznam.cz/ajax', $cookieJarPath);
 $results = $serpParser->getResults($query, $from);
 
 // ---------------------------------------------------------------

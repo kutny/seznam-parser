@@ -3,8 +3,6 @@ Parser výsledků nového vyhledávání Seznam.cz
 
 Knihovna umožňuje získat libovolnou stránku výsledků vyhledávání ze Seznam.cz/Seznam.sk na zvolené klíčové slovo. Neobsahuje funcionalitu měření pozic.
 
-Získávání výsledků funguje zatím pouze pro Seznam.sk, protože nové vyhledávání na Seznam.cz je dostupné jen na pozvánky.
-
 Knihovnu pro vás vytvořil **Jiří Koutný**, tvůrce **SEO nástroje Collabim** (http://www.collabim.cz)
 
 Zprovoznění

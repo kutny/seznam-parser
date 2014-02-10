@@ -8,9 +8,10 @@ function __autoload($className) {
 	}
 }
 
-function getSerpParser($searchRpcUrl) {
+function getSerpParser($searchRpcUrl, $cookieJarPath) {
 	return new \Collabim\Seznam\SerpParser(
 		$searchRpcUrl,
+		$cookieJarPath,
 		new \Collabim\Curl\CurlDownloader(
 			new \Collabim\Curl\CurlDownloader\ResponseParser(
 				new \Collabim\Curl\CurlDownloader\BodyDecoder()
