@@ -10,8 +10,8 @@ class Config {
 	private $cookiesStorageFile;
 	private $maxRedirects;
 	private $postData;
-
 	private $headers = array();
+	private $logFilePath;
 
 	public function __construct($url) {
 		$this->url = $url;
@@ -83,6 +83,14 @@ class Config {
 
 	public function hasHeaders() {
 		return count($this->headers) > 0;
+	}
+
+	public function setLogFilePath($logFilePath) {
+		$this->logFilePath = $logFilePath;
+	}
+
+	public function getLogFilePath() {
+		return $this->logFilePath;
 	}
 
 }

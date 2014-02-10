@@ -38,6 +38,11 @@ class CurlDownloader {
 			curl_setopt($curlConnection, CURLOPT_COOKIEFILE, $config->getCookiesStorageFile());
 		}
 
+		if ($config->getLogFilePath()) {
+			curl_setopt($curlConnection, CURLOPT_STDERR, fopen($config->getLogFilePath(), 'a+'));
+			curl_setopt($curlConnection, CURLOPT_VERBOSE, true);
+		}
+
 		if ($config->getMaxRedirects()) {
 			curl_setopt($curlConnection, CURLOPT_MAXREDIRS, $config->getMaxRedirects());
 		}
